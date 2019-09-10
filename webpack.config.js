@@ -3,9 +3,13 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: "development",
-  entry: ['./src/index.electron.tsx'],
+  entry: {
+    electron: './src/index.electron.tsx',
+    android: './src/index.android.tsx',
+  },
   output: {
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
   },
   devServer: {
     hot: true,
@@ -34,22 +38,14 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader'
-        ]
-      },
-      {
-        test: /\.(html)$/,
-        use: [
-          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false',
+          'file-loader?name=images/[name].[ext]',
         ]
       }
     ]
   },
   plugins: [
     new CopyPlugin([
-      { from: 'src/images', to: './images' },
-    //  { from: 'src/index.html', to: './' }
+      { from: 'src/index.html', to: './' }
     ])
   ],
   resolve: {
@@ -57,10 +53,5 @@ module.exports = {
       'react-native$': 'react-native-web'
     },
     extensions: [ '.tsx', '.ts', '.js', '.html' ]
-  },
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: 'http://localhost:8080/'
   }
 };

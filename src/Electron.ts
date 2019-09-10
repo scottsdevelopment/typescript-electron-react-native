@@ -1,25 +1,31 @@
-import { app, BrowserWindow } from "electron";
-import * as path from "path";
+import { app, BrowserWindow } from 'electron';
+import * as path from 'path';
 
 let mainWindow: Electron.BrowserWindow;
 
-
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
+  const mainPackage = await import('./app.json');
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
     webPreferences: {
-        nodeIntegration: true
-    }
+      preload: path.join(__dirname, 'ElectronPreload.js'),
+      nodeIntegration: true
+    },
   });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.setTitle(mainPackage.name);
+  });
+
 
   /* secondaryWindow = new BrowserWindow({
     height: 600,
     width: 800,
   }); */
   // and load the index.html of the app.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.loadFile(path.join(__dirname, "./index.html"));
 
@@ -55,6 +61,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
