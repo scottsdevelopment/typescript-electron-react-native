@@ -6,7 +6,6 @@ import {
   ScrollView,
   View,
   Image,
-  StyleSheet,
   Linking,
   TouchableOpacity
 } from 'react-native';
@@ -19,14 +18,12 @@ import TypeOrmLogo from '../images/logo.typeorm.png';
 import DonateButton from '../images/button.paypal.donate.png';
 
 import { SendNotification } from '../services/NotificationService';
+import { styles } from '../styles/stylesheet';
 
 class App extends React.Component {
   render() {
     return (
-      <ScrollView style={{
-        flex: 1,
-        padding: marginSize
-      }}>
+      <ScrollView style={styles.padding}>
         <View style={{
           flexDirection:'row', 
           flexWrap: 'wrap',
@@ -58,10 +55,7 @@ class App extends React.Component {
         </Text>
         <Text style={styles.baseText}>This is a sample cross-platform application using TypeScript, TypeOrm, React Native, Electron, and Webpack. The goal is to provide one codebase that runs across as many devices and environments as possible. Using TypeOrm we can quickly create a database and entity objects that can persist across a local database, this allows for rapid prototyping using a built-in CRUD view based off the entities reflective type data.</Text>
         <View
-          style={{
-            flex: 1,
-            alignItems: 'flex-start',
-          }}
+          style={styles.leftAlign}
         >
         <Text style={styles.titleText}>Core Functionality</Text>
         <TouchableOpacity 
@@ -105,49 +99,4 @@ class App extends React.Component {
   }
 }
 
-const marginSize = 15;
-
-const styles = StyleSheet.create({
-  logoImage: {
-    width: 50, 
-    height: 50,
-    marginLeft: marginSize,
-    marginRight: marginSize
-  },
-  baseText: {
-    fontFamily: 'Cochin',
-    fontSize: 16,
-    marginTop: marginSize,
-  },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: marginSize,
-  },
-  donateButtonView: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: marginSize,
-  },
-  donateButton: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 39, 
-    width: 98,
-    marginTop: marginSize,
-  },
-  exampleButton: {
-    alignItems: 'flex-start',
-    height: 30,
-    borderWidth: 1,
-    borderColor: '#000000',
-    backgroundColor: '#eaeaea',
-    padding: 5,
-    marginTop: marginSize,
-    borderRadius: 4,
-  }
-});
 export default App;
