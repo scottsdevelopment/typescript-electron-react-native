@@ -1,7 +1,7 @@
 import { getRepository as nodeGetRepository, createConnection, ConnectionOptions, EntitySchema, Connection } from 'typeorm';
 import { ConnectionOptions as BrowserConnectionOptions, Connection as BrowserConnection } from 'typeorm/browser';
 import { Entities } from '../Entities';
-import { Platform } from 'react-native'
+import { isElectron } from './Platform';
 // Allow for global TypeOrm connection
 declare global {
     interface Window { TypeOrm: Connection|BrowserConnection|null; }
@@ -32,7 +32,7 @@ export class Database {
     }
 
     async load() {
-        if (Platform.OS == 'web') {
+        if (isElectron()) {
             await this.loadElectronConnection(ElectronConnectionOptions);
         }
         else {
@@ -47,10 +47,10 @@ export class Database {
     }
 
     async loadReactNativeConnection(options: BrowserConnectionOptions) {
-        const typeOrmBrowser = await import('typeorm/browser');
-        this.internalGetRepository = typeOrmBrowser.getRepository;
-        const connection: BrowserConnection = await typeOrmBrowser.createConnection(options);
-        window.TypeOrm = connection;
+        //const typeOrmBrowser = require('typeorm/browser');
+        //this.internalGetRepository = typeOrmBrowser.getRepository;
+        //const connection: BrowserConnection = await typeOrmBrowser.createConnection(options);
+        //window.TypeOrm = connection;
     }
 
     getRepository(entity: Function|EntitySchema<any>) {

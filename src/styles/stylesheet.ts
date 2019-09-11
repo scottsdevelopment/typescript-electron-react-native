@@ -2,7 +2,7 @@ import {
     StyleSheet
 } from 'react-native';
 
-const marginSize = 15;
+export const marginSize = 15;
 
 export const styles = StyleSheet.create({
   padding: {
@@ -30,7 +30,9 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: marginSize,
   },
-  donateButtonView: {
+  center: {
+    flex: 1,
+    flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
