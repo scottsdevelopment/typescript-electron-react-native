@@ -1,10 +1,9 @@
-import { Database } from './services/Database';
-
+import { ElectronDatabase } from './services/ElectronDatabase';
+// import { SequelizeDatabase } from './services/Sequelize';
 
 async function performPreload() {
-  try {  
-    const dbService = new Database();
-    await dbService.load();
+  try { 
+    new ElectronDatabase();
   } catch(e) {
     console.log(e, e.stack);
   }

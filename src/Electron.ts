@@ -15,6 +15,8 @@ async function createWindow() {
     },
   });
 
+
+
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.setTitle(mainPackage.name);
   });

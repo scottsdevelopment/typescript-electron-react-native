@@ -20,8 +20,43 @@ import DonateButton from '../images/button.paypal.donate.png';
 import { SendNotification } from '../services/NotificationService';
 import { styles, marginSize } from '../styles/stylesheet';
 
-class App extends React.Component {
+import { EntityList } from './EntityList';
+import { Category } from '../entities/Category';
+import { Author } from '../entities/Author';
+import { isElectron } from '../services/Platform';
+import { ReactNativeDatabase } from '../services/ReactNativeDatabase';
+// import "reflect-metadata";
+// import { SequelizeDatabase } from '../services/Sequelize';
+// import { ElectronDatabase } from '../services/ElectronDatabase';
+
+class App extends React.Component<{}, {
+  isLoading: boolean
+}> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      isLoading: true
+    }
+  }
+  async doMore() {
+    if(!isElectron()) {
+      const reactNativeDb = new ReactNativeDatabase();
+      await reactNativeDb.load();
+    }
+  }
+
+  componentDidMount() {
+    this.doMore().then(() => {
+      this.setState({
+        isLoading: false
+      });
+    });
+  }
+
   render() {
+    if (this.state.isLoading === true) {
+      return <Text>Loading... ({this.state.isLoading ? 'true': 'false'})</Text>
+    }
     return (
         <ScrollView style={{
           paddingLeft: marginSize,
@@ -69,30 +104,14 @@ class App extends React.Component {
               >
                 <Text>Create Notification Example</Text>
               </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.exampleButton}
-                onPress={() => {SendNotification({
-                  title: "Notification Example",
-                  message: "This is a sample notification."
-                })}}
-              >
-                <Text>CRUD Dashboard</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.exampleButton}
-                onPress={() => {SendNotification({
-                  title: "Notification Example",
-                  message: "This is a sample notification."
-                })}}
-              >
-                <Text>Scrollable</Text>
-              </TouchableOpacity>
             </View>
+            <EntityList entityClass={Category}/>
+            <EntityList entityClass={Author}/>
             <Text style={styles.titleText}>
               Donate
             </Text>
             <Text style={styles.baseText}>
-              If you like what you see or had success with this project, please feel free to drop a donation by clicking on the button below.
+              Test. If you like what you see or had success with this project, please feel free to drop a donation by clicking on the button below.
             </Text>
             <View style={styles.center}>
               <TouchableOpacity 

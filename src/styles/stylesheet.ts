@@ -55,5 +55,12 @@ export const styles = StyleSheet.create({
     padding: 5,
     marginTop: marginSize,
     borderRadius: 4,
-  }
+  },
+  textInput: {
+    borderStyle: 'solid',
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+    height: 30,
+    fontSize: 15
+  },
 });
