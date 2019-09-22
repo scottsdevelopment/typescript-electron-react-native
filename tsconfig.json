@@ -1,7 +1,7 @@
 {
     "version": "2.1.1",
     "compilerOptions": {
-        "target": "es3",
+        "target": "es5",
         "moduleResolution": "node",
         "module": "commonjs",
         "jsx": "react",
@@ -33,7 +33,7 @@
             "./node_modules/@types",
             "./types/"
         ],
-        "types": [],
+        "types": ["react", "react-native"],
         "allowSyntheticDefaultImports": true
 
     },

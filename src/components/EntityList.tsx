@@ -3,6 +3,7 @@ import {
     Text,
     TextInput,
     View,
+    TouchableOpacity,
   } from 'react-native';
   
 interface PropsType { 
@@ -14,11 +15,7 @@ interface StateType {
 
 import { getRepository, Repository } from 'typeorm';
 import { isElectron } from '../services/Platform';
-import { styles } from '../styles/stylesheet';
-
-// import { Repository } from 'typeorm';
-// import { isElectron } from '../services/Platform';
-// import { ReactNativeDatabase } from '../services/ReactNativeDatabase';
+import { styles } from '../styles/Stylesheet';
 
 export class EntityList extends React.Component<PropsType,
     StateType> {
@@ -28,7 +25,7 @@ export class EntityList extends React.Component<PropsType,
     constructor(props: PropsType) {
         super(props);
         this.props = props;
-        if (isElectron()) {
+        if (isElectron) {
            this.state = {
                repository: window.TypeOrm.getRepository((this.props.entityClass as Function).name)
            }
@@ -39,29 +36,63 @@ export class EntityList extends React.Component<PropsType,
         }
         console.log(this.state.repository.metadata.columns)
     }
-
+    handleSubmit() {
+        const generic = new this.props.entityClass.prototype.constructor();
+        console.log(generic);
+        this.state.repository.save(generic);
+    }
     render() {
+        const entityName = (this.props.entityClass as Function).name;
         const columns = this.state.repository.metadata.columns.map((column) => {
             if (column.isGenerated) {
                 return ( <View key={column.databaseName}></View> );
             }
+            const type = (column.type as Function).name;
+            let input = null;
+            switch (type) {
+                case "String":
+                default:
+                    const columnLength: number = parseInt(column.length, 10);
+                    let multiLine = false;
+                    let numberOfLines: number = 1;
+                    if (columnLength > 255) {
+                        multiLine = true;
+                        numberOfLines = Math.round(columnLength / 100);
+                    }
+                    if (numberOfLines > 5) {
+                        numberOfLines = 5;
+                    }
+                    input = 
+                    <TextInput
+                     multiline={multiLine}
+                     numberOfLines={numberOfLines}
+                     style={styles.textInput}
+                    />;
+                    break;
+            }
             return (
                 <View key={column.databaseName}>
-                    <Text>
-                        { column.databaseName } { (column.type as Function).name }:
+                    <Text style={styles.baseText}>
+                        { column.databaseName } { type }:
                     </Text>
-                    <TextInput style={styles.textInput}/>  
+                    { input }
                 </View>
             )
         });
         return (
             <View>
-                <Text>
-                    { (this.props.entityClass as Function).name },  Columns: {this.state.repository.metadata.columns.length}
+                <Text style={styles.baseText}>
+                    { entityName },  Columns: {this.state.repository.metadata.columns.length}
                 </Text>
                 {
                     columns
                 }
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.handleSubmit.bind(this)}
+                >
+                    <Text style={styles.buttonText}>Save {entityName}</Text>
+                </TouchableOpacity>
             </View>
         )
     }

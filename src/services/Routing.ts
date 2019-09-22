@@ -1,11 +1,11 @@
-import { Platform } from 'react-native'
+import { isElectron } from './Platform';
 
-let Router = null;
+const RouterPackage = isElectron
+  ? require('react-router-dom')
+  : require('react-router-native');
 
-if (Platform.OS === 'web') {
-  Router = require('react-router-dom').BrowserRouter
-} else {
-  Router = require('react-router-native').NativeRouter
-}
+export const Router = isElectron
+  ? RouterPackage.HashRouter
+  : RouterPackage.NativeRouter;
 
-export default Router;
+export default RouterPackage;

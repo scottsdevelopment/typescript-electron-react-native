@@ -10,7 +10,7 @@ export class Author {
     name: string;
 
     @Column({nullable: true})
-    birthdate: string;
+    birthdate: Date;
 
     @OneToMany(type => Post, post => post.author)
     posts: Post[];

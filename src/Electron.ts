@@ -20,19 +20,18 @@ async function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.setTitle(mainPackage.name);
   });
-
-
+  
   /* secondaryWindow = new BrowserWindow({
     height: 600,
     width: 800,
   }); */
   // and load the index.html of the app.
-  // mainWindow.webContents.openDevTools();
+  // 
 
   mainWindow.loadFile(path.join(__dirname, "./index.html"));
 
   // Open the DevTools.
-
+  mainWindow.webContents.openDevTools();
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
     // Dereference the window object, usually you would store windows

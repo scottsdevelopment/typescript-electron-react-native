@@ -10,7 +10,7 @@
     "build": "tsc && webpack",
     "android": "react-native run-android",
     "electron": "electron dist/Electron.js",
-    "postinstall": "npx electron-rebuild -w sqlite3"
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "",
   "license": "ISC",
@@ -21,9 +21,7 @@
     "@types/react-native-push-notification": "^3.0.6",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
-    "electron": "^6.0.7",
-    "electron-packager": "^14.0.6",
-    "electron-rebuild": "^1.8.6",
+    "electron": "^4.0.0",
     "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
     "module-alias": "^2.2.1",
@@ -35,19 +33,24 @@
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
-    "webpack-dev-server": "^3.8.0"
+    "webpack-dev-server": "^3.8.0",
+    "write-file-webpack-plugin": "^4.5.1"
   },
   "dependencies": {
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.0.6",
+    "electron-rebuild": "^1.8.6",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-native": "^0.60.5",
+    "react-native-gesture-handler": "^1.4.1",
     "react-native-push-notification": "github:scottsdevelopment/react-native-push-notification",
     "react-native-sqlite-storage": "^4.1.0",
     "react-native-web": "^0.11.7",
     "react-router-dom": "^5.0.1",
     "react-router-native": "^5.0.1",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^4.1.0",
-    "typeorm": "^0.2.18"
+    "sqlite3": "^4.0.0",
+    "typeorm": "^0.2.13"
   }
 }

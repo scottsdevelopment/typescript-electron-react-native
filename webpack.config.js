@@ -1,5 +1,8 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const WriteFilePlugin = require('write-file-webpack-plugin');
+const exec = require('child_process').exec;
 
 module.exports = {
   mode: "development",
@@ -13,16 +16,24 @@ module.exports = {
   },
   devServer: {
     hot: true,
-    contentBase: './dist',
-    publicPath: 'http://localhost:8080',
-    inline: true,
+    // contentBase: path.resolve(__dirname, 'dist'),
+    // publicPath: 'http://localhost:8080',
+    // inline: true,
   },
   module: {
     rules: [
       {
+        test: /\.jsx?$/,
+        use: 'ts-loader',
+        include: [
+  //        path.resolve(__dirname, 'node_modules/react-navigation'),
+            path.resolve(__dirname, 'node_modules/react-router-native')
+        ],
+      },
+      {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
@@ -44,14 +55,32 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new WriteFilePlugin(),
     new CopyPlugin([
       { from: 'src/index.html', to: './' }
-    ])
+    ]),
+    {
+      apply: (compiler) => {
+        compiler.hooks.entryOption.tap('CompileTsc', (compilation) => {
+          exec('tsc', (err, stdout, stderr) => {
+            if (err) process.stderr.write(err);
+            if (stdout) process.stdout.write(stdout);
+            if (stderr) process.stderr.write(stderr);
+          });
+        });
+      }
+    }
   ],
+  watchOptions: {
+    ignored: ['./dist/**/*.hot-update.json','dist/**/*.d.ts', 'node_modules']
+  },
+  // externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore'],
   resolve: {
     alias: {
       'react-native$': 'react-native-web'
     },
     extensions: [ '.tsx', '.ts', '.js', '.html' ]
-  }
+  },
+  externals: ['sqlite3']
 };
