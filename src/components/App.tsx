@@ -26,6 +26,7 @@ class App extends React.Component<{}, {
       isLoading: true
     }
   }
+  
   async doMore() {
     if(isReactNative) {
       const reactNativeDb = new ReactNativeDatabase();

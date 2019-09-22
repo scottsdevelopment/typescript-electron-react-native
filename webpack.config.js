@@ -78,7 +78,7 @@ module.exports = {
   // externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore'],
   resolve: {
     alias: {
-      'react-native$': 'react-native-web'
+      'react-native': 'react-native-web'
     },
     extensions: [ '.tsx', '.ts', '.js', '.html' ]
   },

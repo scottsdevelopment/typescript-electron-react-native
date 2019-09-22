@@ -2,8 +2,9 @@ import {
     StyleSheet
 } from 'react-native';
 
-import {spacingSize} from './Stylesheet';
-
+// import { spacingSize } from '../styles/Stylesheet';
+ 
+const spacingSize = 15;
 export const aboutStyles = StyleSheet.create({
   iconImage: {
     width: 50, 

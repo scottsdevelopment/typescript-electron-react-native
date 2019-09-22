@@ -2,6 +2,7 @@ import {
     StyleSheet
 } from 'react-native';
 
+
 export const spacingSize = 15;
 
 export const styles = StyleSheet.create({
@@ -81,3 +82,5 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
 });
+
+export default { spacingSize, styles };

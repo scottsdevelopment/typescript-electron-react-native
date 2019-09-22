@@ -7,10 +7,11 @@ import {
   } from 'react-native';
   
 interface PropsType { 
-    entityClass: Function;
+    entityClass: Function
 }
 interface StateType {
-    repository: Repository<any>;
+    repository: Repository<any>,
+    genericProps: {[key: string]: any}
 }
 
 import { getRepository, Repository } from 'typeorm';
@@ -25,21 +26,28 @@ export class EntityList extends React.Component<PropsType,
     constructor(props: PropsType) {
         super(props);
         this.props = props;
+        let repository = new Repository();
         if (isElectron) {
-           this.state = {
-               repository: window.TypeOrm.getRepository((this.props.entityClass as Function).name)
-           }
+            repository = window.TypeOrm.getRepository((this.props.entityClass as Function).name);
         } else {
-           this.state = {
-               repository: getRepository(this.props.entityClass)
-           }
+            repository = getRepository(this.props.entityClass);
         }
-        console.log(this.state.repository.metadata.columns)
+        this.state = {
+            repository: repository,
+            genericProps: {},
+        }
     }
     handleSubmit() {
-        const generic = new this.props.entityClass.prototype.constructor();
-        console.log(generic);
-        this.state.repository.save(generic);
+        try {
+            const generic = this.state.repository.create(this.state.genericProps);
+            this.state.repository.save(generic);
+        } catch(e) {
+        }
+    }
+    handleChange(property: string, value: string) {
+        let newGenericProps = this.state.genericProps;
+        newGenericProps[property] = value;
+        this.setState({ genericProps: newGenericProps });
     }
     render() {
         const entityName = (this.props.entityClass as Function).name;
@@ -49,8 +57,8 @@ export class EntityList extends React.Component<PropsType,
             }
             const type = (column.type as Function).name;
             let input = null;
-            switch (type) {
-                case "String":
+            switch (column.type) {
+                case String:
                 default:
                     const columnLength: number = parseInt(column.length, 10);
                     let multiLine = false;
@@ -64,6 +72,7 @@ export class EntityList extends React.Component<PropsType,
                     }
                     input = 
                     <TextInput
+                     onChangeText={(value: string) => { this.handleChange(column.propertyName, value)}}
                      multiline={multiLine}
                      numberOfLines={numberOfLines}
                      style={styles.textInput}
